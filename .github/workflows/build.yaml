@@ -24,10 +24,6 @@ jobs:
         run: mvn -B clean install -DskipTests=true --file pom.xml
       - name: Run Tests
         run: mvn test -f pom.xml
-      - name: Collect binaries
-        run: |
-          mkdir -p deployments
-          find ./ -type f \( -iname \*.ear -o -iname \*.jar -o -iname \*.war \) -exec mv '{}' /deployments/ \;
       - name: Build Container Image 
         uses: redhat-developer/openshift-actions@v1.1
         with:
@@ -35,5 +31,5 @@ jobs:
           openshift_server_url: ${{ secrets.OCP_SERVER }}
           parameters: '{"apitoken": "${{ secrets.OCP_TOKEN }}"}'
           cmd: |
-            'start-build basic-spring --from-dir=deployments'
+            'start-build basic-spring --from-dir=target/'
 #    - name: Deploy to Dev
