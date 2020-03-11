@@ -32,4 +32,12 @@ jobs:
           parameters: '{"apitoken": "${{ secrets.OCP_TOKEN }}", "acceptUntrustedCerts": "true"}'
           cmd: |
             'start-build basic-spring --from-dir=target/'
-#    - name: Deploy to Dev
+      - name: Deploy to Dev
+        uses: redhat-developer/openshift-actions@v1.1
+        with:
+          version: 'latest'
+          openshift_server_url: ${{ secrets.OCP_CLUSTER }}
+          parameters: '{"apitoken": "${{ secrets.OCP_TOKEN }}", "acceptUntrustedCerts": "true"}'
+          cmd: |
+            'tag spring-test/basic-spring:latest spring-test-dev/basic-spring:latest'
+      
