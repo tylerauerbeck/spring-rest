@@ -28,7 +28,7 @@ jobs:
         uses: redhat-developer/openshift-actions@v1.1
         with:
           version: 'latest'
-          openshift_server_url: ${{ secrets.OCP_SERVER }}
+          openshift_server_url: ${{ secrets.OCP_CLUSTER }}
           parameters: '{"apitoken": "${{ secrets.OCP_TOKEN }}"}'
           cmd: |
             'start-build basic-spring --from-dir=target/'
