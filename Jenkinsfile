@@ -14,24 +14,30 @@ pipeline {
   stages {
 
     stage('Build'){
-      sh " mvn clean install -DskipTests=true -f ${POM_FILE}"
+      steps {
+        sh " mvn clean install -DskipTests=true -f ${POM_FILE}"
+      }
     }
-  }
+ 
 
     stage('Unit Tests'){
-      sh "mvn test -f ${POM_FILE}"
+      steps{
+        sh "mvn test -f ${POM_FILE}"
+      }
     }
 
     stage('Bake'){
-      sh """
-        rm -rf oc-build && mkdir -p oc-build/deployments
-        for t in \$(echo "jar;war;ear" | tr ";" "\\n"); do
-          cp -rfv ./target/*.\$t oc-build/deployments/ 2> /dev/null || echo "No \$t files"
-        done
-        oc start-build ${env.APP_NAME} --from-dir=oc-build --wait=true --follow=true || exit 1 
-      """
+      steps{
+        sh """
+          rm -rf oc-build && mkdir -p oc-build/deployments
+          for t in \$(echo "jar;war;ear" | tr ";" "\\n"); do
+            cp -rfv ./target/*.\$t oc-build/deployments/ 2> /dev/null || echo "No \$t files"
+          done
+          oc start-build ${env.APP_NAME} --from-dir=oc-build --wait=true --follow=true || exit 1 
+        """
+      }
     }
-
+  }
 }
 
 
@@ -47,4 +53,3 @@ pipeline {
 //    ${env.OC_CMD} tag ${env.STAGE1}/${env.APP_NAME}:latest ${env.STAGE2}/${env.APP_NAME}:latest
 //    """
 //  }
-
