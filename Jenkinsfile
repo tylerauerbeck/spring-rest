@@ -8,7 +8,7 @@ openshift.withCluster() {
 
 pipeline {
   agent {
-    label 'jenkins-slave-maven' 
+    label 'jenkins-slave-mvn' 
   }
 
   stages {
